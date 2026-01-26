@@ -23,6 +23,7 @@ class Database {
         $this->username = DB_USERNAME;
         $this->password = DB_PASSWORD;
         $this->dbname = $dbname;
+        error_log("connecting for: host='{$this->host}', user='{$this->username}', db='{$this->dbname}'");
         $this->connection = new mysqli($this->host, $this->username, $this->password, $this->dbname);
         if ($this->connection->connect_error) {
             die("Conexión fallida: " . $this->connection->connect_error);
