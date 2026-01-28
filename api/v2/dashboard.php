@@ -15,9 +15,11 @@ error_reporting(E_ALL);
 // Leer parámetros GET
 $fecha = isset($_GET['fecha']) ? $_GET['fecha'] : date('Y-m-d');
 $turno = isset($_GET['turno']) ? $_GET['turno'] : 'completo';
+$periodo = isset($_GET['periodo']) ? $_GET['periodo'] : 'dia';
+$label = isset($_GET['label']) ? $_GET['label'] : 'vel_upm';
 
 // Cargar el controlador de Clean Architecture
 require_once __DIR__ . '/../../interface_adapters/controller/dashboard_controller_v2.php';
 
 $controller = new DashboardControllerV2();
-echo $controller->getDashboardData($fecha, $turno);
+echo $controller->getDashboardData($fecha, $turno, $label);

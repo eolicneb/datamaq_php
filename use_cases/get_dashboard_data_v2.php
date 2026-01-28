@@ -10,8 +10,9 @@ class GetDashboardDataV2 {
         $this->dashboardRepository = $dashboardRepository;
     }
 
-    public function execute($fecha, $turno) {
+    public function execute($fecha, $turno, $label = null) {
         // Lógica real: obtener datos desde el repositorio
-        return $this->dashboardRepository->getDashboardData($turno, 'vel_upm', $fecha);
+        $ref_time = strtotime($fecha);
+        return $this->dashboardRepository->getDashboardData($turno, $label, $ref_time);
     }
 }
