@@ -9,9 +9,12 @@ require_once __DIR__ . '/../../entities/dashboard.php';
 
 class DashboardRepositoryV2 implements DashboardRepositoryInterfaceV2 {
     public function getDashboardData($periodo, $label = null, $ref_time = null) {
-        $ls_periodos = ['semana' => 604800, 'turno' => 28800, 'hora' => 7200];
-        if (!isset($ls_periodos[$periodo])) {
-            throw new InvalidArgumentException('Periodo no válido');
+        $ls_inicios = ['completo' => 0, 'dia' => 21600, 'tarde' => 50400, 'central' => 28800, 'manana' => 21600]; 
+        $ls_turnos = ['completo' => 'dia', 'dia' => '2-turnos', 'tarde' => 'turno', 'central' => 'turno', 'manana' => 'turno']; 
+        $ls_span = ['semana' => 604800, 'dia' => 86400, '2-turnos' => 57600, 'turno' => 28800, 'hora' => 7200];
+        if (!isset($ls_inicios[$periodo])) {
+            $msg = "Periodo no válido: {$periodo}";
+            throw new InvalidArgumentException($msg);
         }
         $db = Database::getInstance();
         $conn = $db->getConnection();
@@ -31,8 +34,8 @@ class DashboardRepositoryV2 implements DashboardRepositoryInterfaceV2 {
         } else {
             $ref_time = $valorInicial;
         }
-        $tiempo1 = $ref_time - $ls_periodos[$periodo];
-        $tiempo2 = $ref_time;
+        $tiempo2 = $ref_time + $ls_inicios[$periodo];
+        $tiempo1 = $tiempo2 - $ls_span[$ls_turnos[$periodo]];
         $sqlData = "SELECT `timestamp`, `reading` FROM `readings`
                      WHERE `label` = '{$label}' AND `timestamp` > {$tiempo1} AND `timestamp` <= {$tiempo2}
                      ORDER BY `timestamp` ASC";
